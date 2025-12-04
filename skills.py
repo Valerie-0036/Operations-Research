@@ -193,8 +193,7 @@ model.ActivateEmp = pyo.Constraint(model.I, rule=activation_rule)
 
 # 6. SOLVE AND OUTPUT
 # ===================
-solver = po.SolverFactory('glpk') # Ensure GLPK is installed
-
+solver = po.SolverFactory('appsi_highs')
 try:
     results = solver.solve(model)
     
