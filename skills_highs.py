@@ -193,10 +193,13 @@ model.ActivateEmp = pyo.Constraint(model.I, rule=activation_rule)
 
 # 6. SOLVE AND OUTPUT
 # ===================
+import time 
 solver = po.SolverFactory('appsi_highs')
 try:
-    results = solver.solve(model)
-    
+    start_time = time.time()
+    results = solver.solve(model,tee=True)
+    end_time = time.time()
+    wall_clock_time = end_time - start_time
     print("\n" + "="*30)
     print(" OPTIMIZATION RESULTS ")
     print("="*30)
@@ -207,6 +210,13 @@ try:
     print(f"Total Objective Score: {pyo.value(model.Obj):.4f}")
     print(f"Total Semantic Distance: {total_quality_cost:.4f}")
     print(f"Total Employees Used: {int(active_count)}")
+    print("-" * 30)
+    print("PERFORMANCE METRICS:")
+    # Access time from the results object (solver-reported time)
+    # if results.solver.wall_time:
+    #     print(f"Solver Reported Time: {results.solver.wall_time:.4f} seconds")
+    # Print the manually measured wall-clock time
+    print(f"Wall Clock Time:      {wall_clock_time:.4f} seconds")
     print("-" * 30)
 
     for i in model.I:
